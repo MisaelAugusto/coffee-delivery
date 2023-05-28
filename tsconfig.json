@@ -8,6 +8,7 @@
     "paths": {
       "components/*": ["components/*"]
     },
+    "esModuleInterop": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -23,6 +24,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "./jest.config.ts", "./jest.setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
