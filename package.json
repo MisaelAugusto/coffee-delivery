@@ -25,8 +25,10 @@
   "dependencies": {
     "identity-obj-proxy": "^3.0.0",
     "path": "^0.12.7",
+    "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "styled-components": "^5.3.11"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
