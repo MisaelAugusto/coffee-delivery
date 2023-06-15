@@ -6,7 +6,11 @@
     "skipLibCheck": true,
     "baseUrl": "./src",
     "paths": {
-      "components/*": ["components/*"]
+      "components/*": ["components/*"],
+      "screens/*": ["screens/*"],
+      "assets/*": ["assets/*"],
+      "routes/*": ["routes/*"],
+      "styles/*": ["styles/*"]
     },
     "esModuleInterop": true,
 

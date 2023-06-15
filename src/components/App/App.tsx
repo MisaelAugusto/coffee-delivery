@@ -1,11 +1,18 @@
-import Icon from '../Icon';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import { GlobalStyles, theme } from 'styles';
+import RouteProvider from 'components/RouteProvider';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Coffee Delivery</h1>
-      <Icon name="Alarm" />
-    </div>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <RouteProvider />
+      </BrowserRouter>
+
+      <GlobalStyles />
+    </ThemeProvider>
   );
 };
 
