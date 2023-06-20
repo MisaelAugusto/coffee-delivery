@@ -11,7 +11,8 @@
       "assets/*": ["assets/*"],
       "routes/*": ["routes/*"],
       "styles/*": ["styles/*"],
-      "store/*": ["store/*"]
+      "store/*": ["store/*"],
+      "utils/*": ["utils/*"]
     },
     "esModuleInterop": true,
 

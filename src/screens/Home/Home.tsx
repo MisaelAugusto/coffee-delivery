@@ -15,7 +15,8 @@ import {
   IntroductionSubtitle,
   IntroductionItems,
   Coffees,
-  CoffeesTitle
+  CoffeesTitle,
+  CoffeesItems
 } from './styles';
 
 import IntroductionItem from './components/IntroductionItem';
@@ -89,9 +90,11 @@ const Home: React.FC = () => {
       <Coffees>
         <CoffeesTitle>Nossos cafés</CoffeesTitle>
 
-        {coffees.map((coffee) => (
-          <CoffeeItem key={coffee.title} {...coffee} />
-        ))}
+        <CoffeesItems>
+          {coffees.map((coffee) => (
+            <CoffeeItem key={coffee.title} {...coffee} />
+          ))}
+        </CoffeesItems>
       </Coffees>
     </Fragment>
   );

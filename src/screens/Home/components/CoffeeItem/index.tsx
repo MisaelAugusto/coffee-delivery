@@ -1,35 +1,70 @@
 import { Icon } from 'components';
+import { formatNumber } from 'utils';
+
+import {
+  Container,
+  CoffeeImage,
+  Tags,
+  Tag,
+  Title,
+  Description,
+  Footer,
+  PriceText,
+  PriceValue,
+  ButtonsContainer,
+  QuantityContainer,
+  QuantityButton,
+  QuantityText,
+  ShopButton
+} from './styles';
 
 interface CoffeeItemProps extends Coffee {
   quantity: number;
 }
 
-const CoffeeItem: React.FC<CoffeeItemProps> = ({ image, title, description, price, quantity }) => {
+const CoffeeItem: React.FC<CoffeeItemProps> = ({
+  image,
+  tags,
+  title,
+  description,
+  price,
+  quantity
+}) => {
   return (
-    <div>
-      <img src={image} alt={title} />
+    <Container>
+      <CoffeeImage src={image} alt={title} />
 
-      <p>{title}</p>
-      <p>{description}</p>
+      <Tags>
+        {tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
+      </Tags>
 
-      <div>
-        <p>{price}</p>
+      <Title>{title}</Title>
+      <Description>{description}</Description>
 
-        <div>
-          <button>
-            <Icon name="Minus" />
-          </button>
-          <p>{quantity}</p>
-          <button>
-            <Icon name="Plus" />
-          </button>
-        </div>
+      <Footer>
+        <PriceText>
+          R$ <PriceValue>{formatNumber.currency(price)}</PriceValue>
+        </PriceText>
 
-        <button>
-          <Icon name="ShoppingCart" size={16} weight="fill" color="white" />
-        </button>
-      </div>
-    </div>
+        <ButtonsContainer>
+          <QuantityContainer>
+            <QuantityButton>
+              <Icon name="Minus" />
+            </QuantityButton>
+            <QuantityText>{quantity}</QuantityText>
+            <QuantityButton>
+              <Icon name="Plus" />
+            </QuantityButton>
+          </QuantityContainer>
+
+          <ShopButton>
+            <Icon name="ShoppingCart" size={22} weight="fill" color="white" />
+          </ShopButton>
+        </ButtonsContainer>
+      </Footer>
+    </Container>
   );
 };
 

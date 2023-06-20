@@ -71,7 +71,7 @@ export const Introduction = styled.section`
   justify-content: center;
   padding: 5.875rem 10rem;
   gap: 3.5rem;
-  background: ${backgroundImage} center;
+  background-image: ${backgroundImage};
 `;
 
 export const TextSection = styled.div`
@@ -114,4 +114,11 @@ export const CoffeesTitle = styled.p`
     ...props.theme.typography.baloo2.L,
     color: props.theme.base.subtitle
   })}
+`;
+
+export const CoffeesItems = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 `;
