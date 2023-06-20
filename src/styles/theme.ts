@@ -1,13 +1,15 @@
 const DEFAULT_BALOO2_TYPOGRAPHY_STYLES = {
   fontWeight: 800,
   lineHeight: '130%',
-  fontFamily: "'Baloo 2', cursive"
+  fontFamily: "'Baloo 2', cursive",
+  color: '#29292e'
 };
 
 const DEFAULT_ROBOTO_TYPOGRAPHY_STYLES = {
   fontWeight: 400,
   lineHeight: '130%',
-  fontFamily: "'Roboto', sans-serif"
+  fontFamily: "'Roboto', sans-serif",
+  color: '#29292e'
 };
 
 const theme = {

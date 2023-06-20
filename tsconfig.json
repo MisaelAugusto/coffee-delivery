@@ -10,7 +10,8 @@
       "screens/*": ["screens/*"],
       "assets/*": ["assets/*"],
       "routes/*": ["routes/*"],
-      "styles/*": ["styles/*"]
+      "styles/*": ["styles/*"],
+      "store/*": ["store/*"]
     },
     "esModuleInterop": true,
 
