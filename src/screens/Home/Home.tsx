@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon } from 'components';
 
 import logoImage from 'assets/logo.svg';
@@ -30,6 +30,41 @@ const Home: React.FC = () => {
 
   const [coffees, setCoffees] = useState<Coffee[]>([]);
 
+  const coffeesInCart = useMemo(
+    () => coffees.filter((coffee) => coffee.quantityInCart > 0).length,
+    [coffees]
+  );
+
+  const handleIncreaseCoffeeQuantity = useCallback((coffeeId: number) => {
+    setCoffees((previousState) =>
+      previousState.map((coffee) => ({
+        ...coffee,
+        ...(coffee.id === coffeeId && { quantity: coffee.quantity + 1 })
+      }))
+    );
+  }, []);
+
+  const handleDecreaseCoffeeQuantity = useCallback((coffeeId: number) => {
+    setCoffees((previousState) =>
+      previousState.map((coffee) => ({
+        ...coffee,
+        ...(coffee.id === coffeeId && { quantity: coffee.quantity - 1 })
+      }))
+    );
+  }, []);
+
+  const handleAddCoffeeToCart = useCallback((coffeeId: number) => {
+    setCoffees((previousState) =>
+      previousState.map((coffee) => ({
+        ...coffee,
+        ...(coffee.id === coffeeId && {
+          quantity: 0,
+          quantityInCart: coffee.quantity + coffee.quantityInCart
+        })
+      }))
+    );
+  }, []);
+
   useEffect(() => setCoffees(coffeesList), [coffeesList]);
 
   return (
@@ -37,13 +72,13 @@ const Home: React.FC = () => {
       <Header>
         <img src={logoImage} />
 
-        <HeaderContent>
+        <HeaderContent content={String(coffeesInCart)}>
           <Place>
             <Icon name="MapPin" size={22} weight="fill" />
             <p>Campina Grande, PB</p>
           </Place>
 
-          <Cart to="/test" content="0">
+          <Cart to="/test" content="1">
             <Icon name="ShoppingCart" size={28} weight="fill" />
           </Cart>
         </HeaderContent>
@@ -92,7 +127,13 @@ const Home: React.FC = () => {
 
         <CoffeesItems>
           {coffees.map((coffee) => (
-            <CoffeeItem key={coffee.title} {...coffee} />
+            <CoffeeItem
+              key={coffee.title}
+              {...coffee}
+              handleIncreaseCoffeeQuantity={handleIncreaseCoffeeQuantity}
+              handleDecreaseCoffeeQuantity={handleDecreaseCoffeeQuantity}
+              handleAddCoffeeToCart={handleAddCoffeeToCart}
+            />
           ))}
         </CoffeesItems>
       </Coffees>

@@ -18,8 +18,7 @@ export const HeaderContent = styled.div`
   position: relative;
 
   &::after {
-    // FIX THIS
-    content: '3';
+    content: attr(content);
     display: flex;
     justify-content: center;
     width: 1.125rem;

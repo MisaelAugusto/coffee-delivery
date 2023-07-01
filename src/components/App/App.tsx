@@ -3,15 +3,18 @@ import { ThemeProvider } from 'styled-components';
 
 import { GlobalStyles, theme } from 'styles';
 import RouteProvider from 'components/RouteProvider';
+import { CartProvider } from 'hooks/useCart/useCart';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <RouteProvider />
-      </BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
+          <RouteProvider />
+        </BrowserRouter>
 
-      <GlobalStyles />
+        <GlobalStyles />
+      </CartProvider>
     </ThemeProvider>
   );
 };

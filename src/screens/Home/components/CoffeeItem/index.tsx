@@ -14,22 +14,29 @@ import {
   ButtonsContainer,
   QuantityContainer,
   QuantityButton,
+  AddButtonTooltip,
   QuantityText,
-  ShopButton
+  ShopButton,
+  ShopButtonTooltip
 } from './styles';
 
 interface CoffeeItemProps extends Coffee {
-  quantity: number;
+  handleIncreaseCoffeeQuantity: (coffeeId: number) => void;
+  handleDecreaseCoffeeQuantity: (coffeeId: number) => void;
+  handleAddCoffeeToCart: (coffeeId: number) => void;
 }
 
+const MAX_COFFEE_QUANTITY = 10;
+const MIN_COFFEE_QUANTITY = 0;
+
 const CoffeeItem: React.FC<CoffeeItemProps> = ({
-  image,
-  tags,
-  title,
-  description,
-  price,
-  quantity
+  handleIncreaseCoffeeQuantity,
+  handleDecreaseCoffeeQuantity,
+  handleAddCoffeeToCart,
+  ...coffee
 }) => {
+  const { id, image, tags, title, description, price, quantity, quantityInCart } = coffee;
+
   return (
     <Container>
       <CoffeeImage src={image} alt={title} />
@@ -50,17 +57,48 @@ const CoffeeItem: React.FC<CoffeeItemProps> = ({
 
         <ButtonsContainer>
           <QuantityContainer>
-            <QuantityButton>
+            <QuantityButton
+              title="Diminuir quantidade"
+              onClick={() => handleDecreaseCoffeeQuantity(id)}
+              disabled={quantity === MIN_COFFEE_QUANTITY}
+            >
               <Icon name="Minus" />
             </QuantityButton>
+
             <QuantityText>{quantity}</QuantityText>
-            <QuantityButton>
+
+            <QuantityButton
+              title="Aumentar quantidade"
+              onClick={() => handleIncreaseCoffeeQuantity(id)}
+              disabled={quantity + quantityInCart === MAX_COFFEE_QUANTITY}
+            >
               <Icon name="Plus" />
+
+              {quantity + quantityInCart === MAX_COFFEE_QUANTITY && (
+                <AddButtonTooltip>
+                  <p>
+                    {`Quantidade máxima atingida (${quantity} + ${quantityInCart} (no carrinho) = ${MAX_COFFEE_QUANTITY})`}
+                  </p>
+                </AddButtonTooltip>
+              )}
             </QuantityButton>
           </QuantityContainer>
 
-          <ShopButton>
+          <ShopButton onClick={() => handleAddCoffeeToCart(id)} disabled={quantity === 0}>
             <Icon name="ShoppingCart" size={22} weight="fill" color="white" />
+
+            <ShopButtonTooltip>
+              {quantity === 0 ? (
+                <p>Selecione uma quantidade para adicionar ao carrinho</p>
+              ) : (
+                <span style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                  <p>Subtotal:</p>
+                  <PriceText>
+                    R$ <PriceValue>{formatNumber.currency(quantity * price)}</PriceValue>
+                  </PriceText>
+                </span>
+              )}
+            </ShopButtonTooltip>
           </ShopButton>
         </ButtonsContainer>
       </Footer>

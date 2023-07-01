@@ -12,7 +12,8 @@
       "routes/*": ["routes/*"],
       "styles/*": ["styles/*"],
       "store/*": ["store/*"],
-      "utils/*": ["utils/*"]
+      "utils/*": ["utils/*"],
+      "hooks/*": ["hooks/*"]
     },
     "esModuleInterop": true,
 
