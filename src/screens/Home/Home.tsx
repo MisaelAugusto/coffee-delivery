@@ -1,14 +1,8 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { Icon } from 'components';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 
-import logoImage from 'assets/logo.svg';
 import introductionCoffeImage from 'assets/introduction-coffee.png';
 
 import {
-  Header,
-  HeaderContent,
-  Place,
-  Cart,
   Introduction,
   TextSection,
   IntroductionTitle,
@@ -29,11 +23,6 @@ const Home: React.FC = () => {
   const { coffees: coffeesList } = useCoffees();
 
   const [coffees, setCoffees] = useState<Coffee[]>([]);
-
-  const coffeesInCart = useMemo(
-    () => coffees.filter((coffee) => coffee.quantityInCart > 0).length,
-    [coffees]
-  );
 
   const handleIncreaseCoffeeQuantity = useCallback((coffeeId: number) => {
     setCoffees((previousState) =>
@@ -69,21 +58,6 @@ const Home: React.FC = () => {
 
   return (
     <Fragment>
-      <Header>
-        <img src={logoImage} />
-
-        <HeaderContent content={String(coffeesInCart)}>
-          <Place>
-            <Icon name="MapPin" size={22} weight="fill" />
-            <p>Campina Grande, PB</p>
-          </Place>
-
-          <Cart to="/test" content="1">
-            <Icon name="ShoppingCart" size={28} weight="fill" />
-          </Cart>
-        </HeaderContent>
-      </Header>
-
       <Introduction>
         <TextSection>
           <IntroductionTitle>Encontre o café perfeito para qualquer hora do dia</IntroductionTitle>

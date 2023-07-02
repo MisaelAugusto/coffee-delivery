@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 
 const Home = lazy(async () => await import('screens/Home'));
+const Cart = lazy(async () => await import('screens/Cart'));
 
 interface Route {
   path: string;
@@ -11,6 +12,10 @@ const routes: Route[] = [
   {
     path: '/',
     element: Home
+  },
+  {
+    path: '/cart',
+    element: Cart
   }
 ];
 
