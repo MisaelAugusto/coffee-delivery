@@ -25,7 +25,7 @@ const Application: React.FC<PropsWithChildren> = ({ children }) => {
             <p>Campina Grande, PB</p>
           </Place>
 
-          <Cart to="/cart" content="1">
+          <Cart to="/checkout" content="1">
             <Icon name="ShoppingCart" size={28} weight="fill" />
           </Cart>
         </HeaderContent>
