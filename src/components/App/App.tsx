@@ -1,11 +1,25 @@
-import Icon from '../Icon';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import { GlobalStyles, theme } from 'styles';
+import RouteProvider from 'components/RouteProvider';
+import { CartProvider } from 'hooks/useCart/useCart';
+
+import Application from './Application';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Coffee Delivery</h1>
-      <Icon name="Alarm" />
-    </div>
+    <ThemeProvider theme={theme}>
+      <CartProvider>
+        <BrowserRouter>
+          <Application>
+            <RouteProvider />
+          </Application>
+        </BrowserRouter>
+
+        <GlobalStyles />
+      </CartProvider>
+    </ThemeProvider>
   );
 };
 
