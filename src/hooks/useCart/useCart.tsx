@@ -39,6 +39,7 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const handleAddCoffeeToCart = useCallback((coffeeId: number) => {
     // TODO
+    return coffeeId;
   }, []);
 
   const value = useMemo(
