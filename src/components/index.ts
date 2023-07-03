@@ -1,3 +1,4 @@
 import Icon from './Icon';
+import TextField from './TextField';
 
-export { Icon };
+export { Icon, TextField };
