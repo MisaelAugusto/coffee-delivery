@@ -1,17 +1,31 @@
-import { useCallback } from 'react';
-import { type FieldValues, FormProvider, useForm } from 'react-hook-form';
+import { useCallback, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Icon, TextField } from 'components';
+import { Icon, TextField, Button } from 'components';
 
 import sampleCoffee from 'assets/coffees/american.svg';
 
 import {
   Container,
-  OrderSection,
+  Section,
   SectionTitle,
-  FormContainer,
-  FormHeader,
-  FormHeaderContent
+  ContentContainer,
+  ContentHeader,
+  ContentHeaderContent,
+  ButtonsContainer,
+  CoffeeItem,
+  CoffeeImage,
+  CoffeeInfo,
+  CoffeePrice,
+  QuantityContainer,
+  QuantityButton,
+  QuantityText,
+  AddButtonTooltip,
+  Line,
+  TotalsContainer,
+  ItemsDeliveryPrices,
+  TotalPrice,
+  StyledButton
 } from './styles';
 
 interface FormValues {
@@ -34,7 +48,13 @@ const defaultValues: FormValues = {
   uf: ''
 };
 
+const CREDIT_CARD_PAYMENT_METHOD_ID = 1;
+const DEBIT_CARD_PAYMENT_METHOD_ID = 2;
+const MONEY_PAYMENT_METHOD_ID = 3;
+
 const Checkout: React.FC = () => {
+  const [paymentMethodId, setPaymentMethodId] = useState<number | null>(null);
+
   const methods = useForm({
     defaultValues
   });
@@ -46,102 +66,153 @@ const Checkout: React.FC = () => {
 
   return (
     <Container>
-      <OrderSection>
+      <Section>
         <SectionTitle>Complete seu pedido</SectionTitle>
 
-        <FormContainer>
-          <FormHeader>
-            <Icon name="MapPinLine" />
+        <ContentContainer>
+          <ContentHeader color="yellow">
+            <Icon name="MapPinLine" size={22} />
 
-            <FormHeaderContent>
+            <ContentHeaderContent>
               <p>Endereço de Entrega</p>
               <span>Informe o endereço onde deseja receber seu pedido</span>
-            </FormHeaderContent>
-          </FormHeader>
+            </ContentHeaderContent>
+          </ContentHeader>
 
           <FormProvider {...methods}>
-            <form style={{ gap: '1rem', display: 'flex', flexWrap: 'wrap' }}>
-              <TextField placeholder="CEP" {...register('cep')} style={{ width: '40%' }} />
+            <form style={{ gap: '0.75rem', display: 'flex', flexWrap: 'wrap' }}>
+              <TextField placeholder="CEP" {...register('cep')} />
+
               <TextField placeholder="Rua" {...register('rua')} style={{ width: '100%' }} />
-              <TextField placeholder="Número" {...register('numero')} style={{ width: '40%' }} />
-              <TextField
-                placeholder="Complemento"
-                {...register('complemento')}
-                style={{ width: '60%' }}
-              />
-              <TextField placeholder="Bairro" {...register('bairro')} style={{ width: '40%' }} />
+
+              <div style={{ display: 'flex', gap: '0.75rem', width: '100%' }}>
+                <TextField placeholder="Número" {...register('numero')} />
+                <TextField
+                  placeholder="Complemento"
+                  {...register('complemento')}
+                  optional
+                  style={{ flex: 1 }}
+                />
+              </div>
+
+              <TextField placeholder="Bairro" {...register('bairro')} />
               <TextField placeholder="Cidade" {...register('cidade')} style={{ width: '50%' }} />
               <TextField placeholder="UF" {...register('uf')} style={{ width: '10%' }} />
             </form>
           </FormProvider>
-        </FormContainer>
+        </ContentContainer>
 
-        <div>
-          <div>
-            <Icon name="CurrencyDollar" />
-            <div>
+        <ContentContainer>
+          <ContentHeader color="purple">
+            <Icon name="CurrencyDollar" size={22} />
+
+            <ContentHeaderContent>
               <p>Pagamento</p>
-              <p>O pagamento é feito na entrega. Escolha a forma que deseja pagar:</p>
-            </div>
-          </div>
+              <span>O pagamento é feito na entrega. Escolha a forma que deseja pagar:</span>
+            </ContentHeaderContent>
+          </ContentHeader>
 
-          <button>
-            <Icon name="CreditCard" />
-            Cartão de crédito
-          </button>
+          <ButtonsContainer>
+            <Button
+              iconName="CreditCard"
+              onClick={() => setPaymentMethodId(CREDIT_CARD_PAYMENT_METHOD_ID)}
+              selected={paymentMethodId === CREDIT_CARD_PAYMENT_METHOD_ID}
+            >
+              Cartão de crédito
+            </Button>
+            <Button
+              iconName="Bank"
+              onClick={() => setPaymentMethodId(DEBIT_CARD_PAYMENT_METHOD_ID)}
+              selected={paymentMethodId === DEBIT_CARD_PAYMENT_METHOD_ID}
+            >
+              Cartão de débito
+            </Button>
+            <Button
+              iconName="Money"
+              onClick={() => setPaymentMethodId(MONEY_PAYMENT_METHOD_ID)}
+              selected={paymentMethodId === MONEY_PAYMENT_METHOD_ID}
+            >
+              Dinheiro
+            </Button>
+          </ButtonsContainer>
+        </ContentContainer>
+      </Section>
 
-          <button>
-            <Icon name="Bank" />
-            Cartão de débito
-          </button>
-          <button>
-            <Icon name="Money" />
-            Dinheiro
-          </button>
-        </div>
-      </OrderSection>
+      <Section>
+        <SectionTitle>Cafés selecionados</SectionTitle>
 
-      <section>
-        <p>Cafés selecionados</p>
+        <ContentContainer style={{ borderRadius: '6px 44px 6px 44px' }}>
+          {[1, 2].map(() => (
+            <>
+              <CoffeeItem>
+                <div style={{ display: 'flex', gap: '1.25rem' }}>
+                  <CoffeeImage src={sampleCoffee} />
 
-        <div>
-          <div>
-            <img src={sampleCoffee} />
+                  <CoffeeInfo>
+                    <p>Expresso Tradicional</p>
 
-            <div>
-              <p>Expresso Tradicional</p>
+                    <ButtonsContainer>
+                      <QuantityContainer>
+                        <QuantityButton
+                          title="Diminuir quantidade"
+                          // onClick={() => handleDecreaseCoffeeQuantity(id)}
+                          // disabled={quantity === MIN_COFFEE_QUANTITY}
+                        >
+                          <Icon name="Minus" />
+                        </QuantityButton>
 
-              {/* SAME QUANTITY BUTTON FROM HOME SCREEN */}
+                        <QuantityText>{0}</QuantityText>
 
-              <button>
-                <Icon name="Trash" />
-                Remover
-              </button>
-            </div>
+                        <QuantityButton
+                          title="Aumentar quantidade"
+                          // onClick={() => handleIncreaseCoffeeQuantity(id)}
+                          // disabled={quantity + quantityInCart === MAX_COFFEE_QUANTITY}
+                        >
+                          <Icon name="Plus" />
 
-            <p>R$ 19,80</p>
-          </div>
+                          {/* {quantity + quantityInCart === MAX_COFFEE_QUANTITY && (
+                      <AddButtonTooltip>
+                      <p>
+                        {`Quantidade máxima atingida (${quantity} + ${quantityInCart} (no carrinho) = ${MAX_COFFEE_QUANTITY})`}
+                      </p>
+                    </AddButtonTooltip>
+                  )} */}
+                        </QuantityButton>
+                      </QuantityContainer>
 
-          <div>
-            <div>
+                      <Button iconName="Trash" size="small">
+                        Remover
+                      </Button>
+                    </ButtonsContainer>
+                  </CoffeeInfo>
+                </div>
+
+                <CoffeePrice>R$ 19,80</CoffeePrice>
+              </CoffeeItem>
+              <Line />
+            </>
+          ))}
+
+          <TotalsContainer>
+            <ItemsDeliveryPrices>
               <p>Total de itens</p>
-              <p>R$ 19,80</p>
-            </div>
+              <span>R$ 19,80</span>
+            </ItemsDeliveryPrices>
 
-            <div>
+            <ItemsDeliveryPrices>
               <p>Entrega</p>
-              <p>R$ 3,50</p>
-            </div>
+              <span>R$ 3,50</span>
+            </ItemsDeliveryPrices>
 
-            <div>
+            <TotalPrice>
               <p>Total</p>
               <p>R$ 23,30</p>
-            </div>
-          </div>
+            </TotalPrice>
+          </TotalsContainer>
 
-          <button>Confirmar pedido</button>
-        </div>
-      </section>
+          <StyledButton>Confirmar pedido</StyledButton>
+        </ContentContainer>
+      </Section>
     </Container>
   );
 };

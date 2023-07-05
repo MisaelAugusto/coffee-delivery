@@ -1,9 +1,18 @@
 import { type HTMLAttributes } from 'react';
 
-import { StyledInput } from './styles';
+import { Container, StyledInput, OptionalLabel } from './styles';
 
-const TextField: React.FC<HTMLAttributes<HTMLInputElement>> = (props) => {
-  return <StyledInput type="text" {...props} />;
+interface TextFieldProps extends HTMLAttributes<HTMLInputElement> {
+  optional?: boolean;
+}
+
+const TextField: React.FC<TextFieldProps> = ({ optional = false, ...props }) => {
+  return (
+    <Container optional={optional}>
+      <StyledInput type="text" {...props} />
+      {optional && <OptionalLabel>Opcional</OptionalLabel>}
+    </Container>
+  );
 };
 
 export default TextField;
