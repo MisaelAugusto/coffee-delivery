@@ -21,9 +21,9 @@ import {
 } from './styles';
 
 interface CoffeeItemProps extends Coffee {
-  handleIncreaseCoffeeQuantity: (coffeeId: number) => void;
-  handleDecreaseCoffeeQuantity: (coffeeId: number) => void;
-  handleAddCoffeeToCart: (coffeeId: number) => void;
+  handleIncreaseCoffeeQuantity: (coffeeId: number, inCart?: boolean) => void;
+  handleDecreaseCoffeeQuantity: (coffeeId: number, inCart?: boolean) => void;
+  handleAddCoffeeToCart: (coffeeId: number, inCart?: boolean) => void;
 }
 
 const MAX_COFFEE_QUANTITY = 10;

@@ -31,8 +31,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
       backgroundColor: props.theme.purple.light
     }),
     ...(props.size === 'small' && {
-      padding: '0.5rem',
-      '&:hover': {}
+      padding: '0.4rem'
     })
   })}
 `;

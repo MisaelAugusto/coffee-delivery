@@ -7,15 +7,14 @@ interface ContainerProps {
 export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
-  width: 100%;
-
-  /* ${(props) => props.optional && { position: 'relative' }} */
+  position: relative;
+  width: 12.5rem;
 `;
 
 export const StyledInput = styled.input`
-  width: 12.5rem;
   padding: 0.75rem;
   border-radius: 4px;
+  width: 100%;
   border: 1px solid transparent;
 
   ${(props) => ({
@@ -32,10 +31,9 @@ export const StyledInput = styled.input`
 
 export const OptionalLabel = styled.span`
   position: absolute;
-  display: none;
   top: 50%;
   transform: translateY(-50%);
-  left: 70%;
+  right: 5%;
 
   ${(props) => ({
     ...props.theme.typography.roboto.S,

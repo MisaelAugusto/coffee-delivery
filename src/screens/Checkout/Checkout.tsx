@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Icon, TextField, Button } from 'components';
 
-import sampleCoffee from 'assets/coffees/american.svg';
+import { useCart } from 'hooks';
 
 import {
   Container,
@@ -27,6 +27,7 @@ import {
   TotalPrice,
   StyledButton
 } from './styles';
+import formatNumber from 'utils/formatNumber';
 
 interface FormValues {
   cep: string;
@@ -48,17 +49,45 @@ const defaultValues: FormValues = {
   uf: ''
 };
 
+const DELIVERY_TAX = 0.25;
+
 const CREDIT_CARD_PAYMENT_METHOD_ID = 1;
 const DEBIT_CARD_PAYMENT_METHOD_ID = 2;
 const MONEY_PAYMENT_METHOD_ID = 3;
 
+const MIN_COFFEE_QUANTITY_IN_CART = 1;
+const MAX_COFFEE_QUANTITY_IN_CART = 10;
+
 const Checkout: React.FC = () => {
+  const {
+    coffees,
+    handleIncreaseCoffeeQuantity,
+    handleDecreaseCoffeeQuantity,
+    handleRemoveCoffeeFromCart
+  } = useCart();
+
   const [paymentMethodId, setPaymentMethodId] = useState<number | null>(null);
 
   const methods = useForm({
     defaultValues
   });
   const { register } = methods;
+
+  const coffeesInCart = useMemo(
+    () => coffees.filter((coffee) => coffee.quantityInCart > 0),
+    [coffees]
+  );
+
+  const numberOfCoffeesInCart = useMemo(
+    () => coffeesInCart.reduce((result, coffee) => result + coffee.quantityInCart, 0),
+    [coffeesInCart]
+  );
+
+  const totalPrice = useMemo(
+    () =>
+      coffeesInCart.reduce((result, coffee) => result + coffee.price * coffee.quantityInCart, 0),
+    [coffeesInCart]
+  );
 
   const submit = useCallback((values: FormValues) => {
     console.log(values);
@@ -85,7 +114,7 @@ const Checkout: React.FC = () => {
 
               <TextField placeholder="Rua" {...register('rua')} style={{ width: '100%' }} />
 
-              <div style={{ display: 'flex', gap: '0.75rem', width: '100%' }}>
+              <div style={{ width: '100%', display: 'flex', gap: '0.75rem' }}>
                 <TextField placeholder="Número" {...register('numero')} />
                 <TextField
                   placeholder="Complemento"
@@ -96,7 +125,7 @@ const Checkout: React.FC = () => {
               </div>
 
               <TextField placeholder="Bairro" {...register('bairro')} />
-              <TextField placeholder="Cidade" {...register('cidade')} style={{ width: '50%' }} />
+              <TextField placeholder="Cidade" {...register('cidade')} style={{ flex: 1 }} />
               <TextField placeholder="UF" {...register('uf')} style={{ width: '10%' }} />
             </form>
           </FormProvider>
@@ -142,52 +171,54 @@ const Checkout: React.FC = () => {
         <SectionTitle>Cafés selecionados</SectionTitle>
 
         <ContentContainer style={{ borderRadius: '6px 44px 6px 44px' }}>
-          {[1, 2].map(() => (
+          {coffeesInCart.map((coffee) => (
             <>
               <CoffeeItem>
                 <div style={{ display: 'flex', gap: '1.25rem' }}>
-                  <CoffeeImage src={sampleCoffee} />
+                  <CoffeeImage src={coffee.image} />
 
                   <CoffeeInfo>
-                    <p>Expresso Tradicional</p>
+                    <p>{coffee.title}</p>
 
                     <ButtonsContainer>
                       <QuantityContainer>
                         <QuantityButton
                           title="Diminuir quantidade"
-                          // onClick={() => handleDecreaseCoffeeQuantity(id)}
-                          // disabled={quantity === MIN_COFFEE_QUANTITY}
+                          onClick={() => handleDecreaseCoffeeQuantity(coffee.id, true)}
+                          disabled={coffee.quantityInCart === MIN_COFFEE_QUANTITY_IN_CART}
                         >
                           <Icon name="Minus" />
                         </QuantityButton>
 
-                        <QuantityText>{0}</QuantityText>
+                        <QuantityText>{coffee.quantityInCart}</QuantityText>
 
                         <QuantityButton
                           title="Aumentar quantidade"
-                          // onClick={() => handleIncreaseCoffeeQuantity(id)}
-                          // disabled={quantity + quantityInCart === MAX_COFFEE_QUANTITY}
+                          onClick={() => handleIncreaseCoffeeQuantity(coffee.id, true)}
+                          disabled={coffee.quantityInCart === MAX_COFFEE_QUANTITY_IN_CART}
                         >
                           <Icon name="Plus" />
 
-                          {/* {quantity + quantityInCart === MAX_COFFEE_QUANTITY && (
-                      <AddButtonTooltip>
-                      <p>
-                        {`Quantidade máxima atingida (${quantity} + ${quantityInCart} (no carrinho) = ${MAX_COFFEE_QUANTITY})`}
-                      </p>
-                    </AddButtonTooltip>
-                  )} */}
+                          {coffee.quantityInCart === MAX_COFFEE_QUANTITY_IN_CART && (
+                            <AddButtonTooltip>
+                              <p>Quantidade máxima atingida</p>
+                            </AddButtonTooltip>
+                          )}
                         </QuantityButton>
                       </QuantityContainer>
 
-                      <Button iconName="Trash" size="small">
+                      <Button
+                        iconName="Trash"
+                        size="small"
+                        onClick={() => handleRemoveCoffeeFromCart(coffee.id)}
+                      >
                         Remover
                       </Button>
                     </ButtonsContainer>
                   </CoffeeInfo>
                 </div>
 
-                <CoffeePrice>R$ 19,80</CoffeePrice>
+                <CoffeePrice>R$ {formatNumber.currency(coffee.price)}</CoffeePrice>
               </CoffeeItem>
               <Line />
             </>
@@ -196,17 +227,17 @@ const Checkout: React.FC = () => {
           <TotalsContainer>
             <ItemsDeliveryPrices>
               <p>Total de itens</p>
-              <span>R$ 19,80</span>
+              <span>R$ {formatNumber.currency(totalPrice)}</span>
             </ItemsDeliveryPrices>
 
             <ItemsDeliveryPrices>
               <p>Entrega</p>
-              <span>R$ 3,50</span>
+              <span>R$ {formatNumber.currency(numberOfCoffeesInCart * DELIVERY_TAX)}</span>
             </ItemsDeliveryPrices>
 
             <TotalPrice>
               <p>Total</p>
-              <p>R$ 23,30</p>
+              <p>R$ {formatNumber.currency(totalPrice + numberOfCoffeesInCart * DELIVERY_TAX)}</p>
             </TotalPrice>
           </TotalsContainer>
 

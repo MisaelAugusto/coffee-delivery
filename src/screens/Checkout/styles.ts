@@ -86,6 +86,8 @@ export const CoffeeInfo = styled.div`
 `;
 
 export const CoffeePrice = styled.p`
+  width: max-content;
+
   ${(props) => ({
     ...props.theme.typography.roboto.M,
     color: props.theme.base.text,
@@ -174,6 +176,7 @@ export const TotalsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
+  min-width: 24rem;
 `;
 
 export const ItemsDeliveryPrices = styled.div`
@@ -207,8 +210,10 @@ export const StyledButton = styled(Button)`
   ${(props) => ({
     ...props.theme.typography.roboto.buttonG,
     color: props.theme.white,
-    backgroundColor: props.theme.yellow.main
-
-    // FIX HOVER
+    backgroundColor: props.theme.yellow.main,
+    '&:hover': {
+      backgroundColor: props.theme.yellow.main,
+      border: `1px solid ${props.theme.yellow.main}`
+    }
   })}
 `;
