@@ -8,6 +8,7 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   size?: 'normal' | 'small';
   selected?: boolean;
   iconName?: keyof typeof PhosphorIcons;
+  type?: 'button' | 'submit';
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -15,6 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   iconName,
   selected = false,
   size = 'normal',
+  type = 'button',
   ...props
 }) => {
   return (

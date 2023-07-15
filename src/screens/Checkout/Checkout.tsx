@@ -71,7 +71,6 @@ const Checkout: React.FC = () => {
   const methods = useForm({
     defaultValues
   });
-  const { register } = methods;
 
   const coffeesInCart = useMemo(
     () => coffees.filter((coffee) => coffee.quantityInCart > 0),
@@ -110,23 +109,23 @@ const Checkout: React.FC = () => {
 
           <FormProvider {...methods}>
             <form style={{ gap: '0.75rem', display: 'flex', flexWrap: 'wrap' }}>
-              <TextField placeholder="CEP" {...register('cep')} />
+              <TextField name="cep" placeholder="CEP" />
 
-              <TextField placeholder="Rua" {...register('rua')} style={{ width: '100%' }} />
+              <TextField name="rua" placeholder="Rua" style={{ width: '100%' }} />
 
               <div style={{ width: '100%', display: 'flex', gap: '0.75rem' }}>
-                <TextField placeholder="Número" {...register('numero')} />
+                <TextField name="numero" placeholder="Número" />
                 <TextField
+                  name="complemento"
                   placeholder="Complemento"
-                  {...register('complemento')}
                   optional
                   style={{ flex: 1 }}
                 />
               </div>
 
-              <TextField placeholder="Bairro" {...register('bairro')} />
-              <TextField placeholder="Cidade" {...register('cidade')} style={{ flex: 1 }} />
-              <TextField placeholder="UF" {...register('uf')} style={{ width: '10%' }} />
+              <TextField name="bairro" placeholder="Bairro" />
+              <TextField name="cidade" placeholder="Cidade" style={{ flex: 1 }} />
+              <TextField name="uf" placeholder="UF" style={{ width: '10%' }} />
             </form>
           </FormProvider>
         </ContentContainer>
@@ -241,7 +240,7 @@ const Checkout: React.FC = () => {
             </TotalPrice>
           </TotalsContainer>
 
-          <StyledButton>Confirmar pedido</StyledButton>
+          <StyledButton type="submit">Confirmar pedido</StyledButton>
         </ContentContainer>
       </Section>
     </Container>
