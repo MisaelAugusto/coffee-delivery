@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -16,6 +17,7 @@ import {
   ContentHeaderContent,
   ButtonsContainer,
   HelperText,
+  NoCoffesMessage,
   CoffeeItem,
   CoffeeImage,
   CoffeeInfo,
@@ -28,7 +30,7 @@ import {
   TotalsContainer,
   ItemsDeliveryPrices,
   TotalPrice,
-  StyledButton
+  SubmitButton
 } from './styles';
 import formatNumber from 'utils/formatNumber';
 
@@ -203,6 +205,14 @@ const Checkout: React.FC = () => {
         <SectionTitle>Cafés selecionados</SectionTitle>
 
         <ContentContainer style={{ borderRadius: '6px 44px 6px 44px' }}>
+          {numberOfCoffeesInCart === 0 && (
+            <NoCoffesMessage>
+              <p>
+                Adicione cafés ao carrinho a partir da <Link to="/">Home</Link>
+              </p>
+            </NoCoffesMessage>
+          )}
+
           {coffeesInCart.map((coffee) => (
             <Fragment key={coffee.id}>
               <CoffeeItem>
@@ -273,9 +283,9 @@ const Checkout: React.FC = () => {
             </TotalPrice>
           </TotalsContainer>
 
-          <StyledButton type="submit" form="orderForm">
+          <SubmitButton type="submit" form="orderForm" disabled={numberOfCoffeesInCart === 0}>
             Confirmar pedido
-          </StyledButton>
+          </SubmitButton>
         </ContentContainer>
       </Section>
     </Container>

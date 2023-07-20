@@ -82,6 +82,22 @@ export const HelperText = styled.p`
   })}
 `;
 
+export const NoCoffesMessage = styled.div`
+  text-align: center;
+
+  p {
+    ${(props) => ({
+      ...props.theme.typography.roboto.M,
+      color: props.theme.base.label
+    })}
+
+    a {
+      text-decoration: none;
+      color: ${(props) => props.theme.base.subtitle};
+    }
+  }
+`;
+
 export const CoffeeItem = styled.div`
   display: flex;
   justify-content: space-between;
@@ -222,7 +238,7 @@ export const TotalPrice = styled(ItemsDeliveryPrices)`
   })}
 `;
 
-export const StyledButton = styled(Button)`
+export const SubmitButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,11 +247,14 @@ export const StyledButton = styled(Button)`
     ...props.theme.typography.roboto.buttonG,
     color: props.theme.white,
     backgroundColor: props.theme.yellow.main,
-    '&:hover': {
+    '&:not(:disabled):hover': {
       backgroundColor: props.theme.yellow.main,
       border: `1px solid ${props.theme.yellow.main}`,
-      transform: 'scale(1.01)',
-      transition: 'transform 0.2s'
+      transform: 'scale(1.01)'
+    },
+    '&:disabled': {
+      backgroundColor: props.theme.base.button,
+      border: 0
     }
   })}
 `;
