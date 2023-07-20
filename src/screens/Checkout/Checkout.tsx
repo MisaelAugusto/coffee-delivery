@@ -136,14 +136,14 @@ const Checkout: React.FC = () => {
               onSubmit={handleSubmit(submit)}
               style={{ gap: '0.75rem', display: 'flex', flexWrap: 'wrap' }}
             >
-              <TextField name="cep" placeholder="CEP" />
+              <TextField name="cep" placeholder="CEP" mask="cep" />
 
               <TextField name="rua" placeholder="Rua" style={{ width: '100%' }} />
 
               <div
                 style={{ width: '100%', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}
               >
-                <TextField name="numero" placeholder="Número" />
+                <TextField name="numero" placeholder="Número" mask="number" />
                 <TextField
                   name="complemento"
                   placeholder="Complemento"
@@ -155,9 +155,9 @@ const Checkout: React.FC = () => {
               <div
                 style={{ width: '100%', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}
               >
-                <TextField name="bairro" placeholder="Bairro" />
+                <TextField name="bairro" placeholder="Bairro" style={{ width: '30%' }} />
                 <TextField name="cidade" placeholder="Cidade" style={{ flex: 1 }} />
-                <TextField name="uf" placeholder="UF" style={{ width: '10%' }} />
+                <TextField name="uf" placeholder="UF" mask="uf" style={{ width: '20%' }} />
               </div>
             </form>
           </FormProvider>
