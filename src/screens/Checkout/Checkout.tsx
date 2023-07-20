@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -68,6 +68,8 @@ const MIN_COFFEE_QUANTITY_IN_CART = 1;
 const MAX_COFFEE_QUANTITY_IN_CART = 10;
 
 const Checkout: React.FC = () => {
+  const navigate = useNavigate();
+
   const {
     coffees,
     handleIncreaseCoffeeQuantity,
@@ -107,9 +109,14 @@ const Checkout: React.FC = () => {
     [coffeesInCart]
   );
 
-  const submit = useCallback((data: FormValues) => {
-    console.log(data);
-  }, []);
+  const submit = useCallback(
+    (data: FormValues) => {
+      console.log(data);
+
+      navigate('/order');
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     if (paymentMethodId > 0) clearErrors('payment_method_id');
