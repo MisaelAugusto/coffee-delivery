@@ -15,6 +15,7 @@ interface CartContextType {
   handleDecreaseCoffeeQuantity: (coffeeId: number, inCart?: boolean) => void;
   handleAddCoffeeToCart: (coffeeId: number) => void;
   handleRemoveCoffeeFromCart: (coffeeId: number) => void;
+  resetCoffeesQuantities: () => void;
 }
 
 const CartContext = createContext<CartContextType>({} as CartContextType);
@@ -71,20 +72,31 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     );
   }, []);
 
+  const resetCoffeesQuantities = useCallback(() => {
+    setCoffees((previousState) =>
+      previousState.map((coffee) => ({
+        ...coffee,
+        quantity: 0
+      }))
+    );
+  }, []);
+
   const value = useMemo(
     () => ({
       coffees,
       handleIncreaseCoffeeQuantity,
       handleDecreaseCoffeeQuantity,
       handleAddCoffeeToCart,
-      handleRemoveCoffeeFromCart
+      handleRemoveCoffeeFromCart,
+      resetCoffeesQuantities
     }),
     [
       coffees,
       handleAddCoffeeToCart,
       handleDecreaseCoffeeQuantity,
       handleIncreaseCoffeeQuantity,
-      handleRemoveCoffeeFromCart
+      handleRemoveCoffeeFromCart,
+      resetCoffeesQuantities
     ]
   );
 

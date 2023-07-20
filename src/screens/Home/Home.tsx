@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useTheme } from 'styled-components';
 
 import introductionCoffeImage from 'assets/introduction-coffee.png';
@@ -25,8 +25,11 @@ const Home: React.FC = () => {
     coffees,
     handleIncreaseCoffeeQuantity,
     handleDecreaseCoffeeQuantity,
-    handleAddCoffeeToCart
+    handleAddCoffeeToCart,
+    resetCoffeesQuantities
   } = useCart();
+
+  useEffect(() => resetCoffeesQuantities, [resetCoffeesQuantities]);
 
   return (
     <Fragment>
