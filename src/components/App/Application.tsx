@@ -1,4 +1,5 @@
 import { Fragment, type PropsWithChildren, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Icon } from 'components';
 import useCart from 'hooks/useCart';
@@ -17,7 +18,9 @@ const Application: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Fragment>
       <Header>
-        <img src={logoImage} />
+        <Link to="/">
+          <img src={logoImage} />
+        </Link>
 
         <HeaderContent content={String(coffeesInCart)}>
           <Place>

@@ -1,5 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import * as zod from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Icon, TextField, Button } from 'components';
 
@@ -13,6 +15,7 @@ import {
   ContentHeader,
   ContentHeaderContent,
   ButtonsContainer,
+  HelperText,
   CoffeeItem,
   CoffeeImage,
   CoffeeInfo,
@@ -29,15 +32,18 @@ import {
 } from './styles';
 import formatNumber from 'utils/formatNumber';
 
-interface FormValues {
-  cep: string;
-  rua: string;
-  numero: string;
-  complemento: string;
-  bairro: string;
-  cidade: string;
-  uf: string;
-}
+const schema = zod.object({
+  cep: zod.string().nonempty('CEP é obrigatório'),
+  rua: zod.string().nonempty('Rua é obrigatória'),
+  numero: zod.string().nonempty('Número é obrigatório'),
+  complemento: zod.string(),
+  bairro: zod.string().nonempty('Bairro é obrigatório'),
+  cidade: zod.string().nonempty('Cidade é obrigatória'),
+  uf: zod.string().nonempty('UF é obrigatória'),
+  payment_method_id: zod.number().nonnegative('Selecione a forma de pagamento')
+});
+
+type FormValues = zod.infer<typeof schema>;
 
 const defaultValues: FormValues = {
   cep: '',
@@ -46,7 +52,8 @@ const defaultValues: FormValues = {
   complemento: '',
   bairro: '',
   cidade: '',
-  uf: ''
+  uf: '',
+  payment_method_id: -1
 };
 
 const DELIVERY_TAX = 0.25;
@@ -66,11 +73,21 @@ const Checkout: React.FC = () => {
     handleRemoveCoffeeFromCart
   } = useCart();
 
-  const [paymentMethodId, setPaymentMethodId] = useState<number | null>(null);
-
-  const methods = useForm({
-    defaultValues
+  const methods = useForm<FormValues>({
+    defaultValues,
+    resolver: zodResolver(schema)
   });
+  const {
+    clearErrors,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    watch
+  } = methods;
+
+  const paymentMethodId = watch('payment_method_id');
+
+  const paymentMethodError = useMemo(() => errors?.payment_method_id, [errors?.payment_method_id]);
 
   const coffeesInCart = useMemo(
     () => coffees.filter((coffee) => coffee.quantityInCart > 0),
@@ -88,9 +105,13 @@ const Checkout: React.FC = () => {
     [coffeesInCart]
   );
 
-  const submit = useCallback((values: FormValues) => {
-    console.log(values);
+  const submit = useCallback((data: FormValues) => {
+    console.log(data);
   }, []);
+
+  useEffect(() => {
+    if (paymentMethodId > 0) clearErrors('payment_method_id');
+  }, [clearErrors, paymentMethodId]);
 
   return (
     <Container>
@@ -108,12 +129,18 @@ const Checkout: React.FC = () => {
           </ContentHeader>
 
           <FormProvider {...methods}>
-            <form style={{ gap: '0.75rem', display: 'flex', flexWrap: 'wrap' }}>
+            <form
+              id="orderForm"
+              onSubmit={handleSubmit(submit)}
+              style={{ gap: '0.75rem', display: 'flex', flexWrap: 'wrap' }}
+            >
               <TextField name="cep" placeholder="CEP" />
 
               <TextField name="rua" placeholder="Rua" style={{ width: '100%' }} />
 
-              <div style={{ width: '100%', display: 'flex', gap: '0.75rem' }}>
+              <div
+                style={{ width: '100%', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}
+              >
                 <TextField name="numero" placeholder="Número" />
                 <TextField
                   name="complemento"
@@ -123,14 +150,18 @@ const Checkout: React.FC = () => {
                 />
               </div>
 
-              <TextField name="bairro" placeholder="Bairro" />
-              <TextField name="cidade" placeholder="Cidade" style={{ flex: 1 }} />
-              <TextField name="uf" placeholder="UF" style={{ width: '10%' }} />
+              <div
+                style={{ width: '100%', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}
+              >
+                <TextField name="bairro" placeholder="Bairro" />
+                <TextField name="cidade" placeholder="Cidade" style={{ flex: 1 }} />
+                <TextField name="uf" placeholder="UF" style={{ width: '10%' }} />
+              </div>
             </form>
           </FormProvider>
         </ContentContainer>
 
-        <ContentContainer>
+        <ContentContainer error={!!paymentMethodError}>
           <ContentHeader color="purple">
             <Icon name="CurrencyDollar" size={22} />
 
@@ -143,26 +174,28 @@ const Checkout: React.FC = () => {
           <ButtonsContainer>
             <Button
               iconName="CreditCard"
-              onClick={() => setPaymentMethodId(CREDIT_CARD_PAYMENT_METHOD_ID)}
+              onClick={() => setValue('payment_method_id', CREDIT_CARD_PAYMENT_METHOD_ID)}
               selected={paymentMethodId === CREDIT_CARD_PAYMENT_METHOD_ID}
             >
               Cartão de crédito
             </Button>
             <Button
               iconName="Bank"
-              onClick={() => setPaymentMethodId(DEBIT_CARD_PAYMENT_METHOD_ID)}
+              onClick={() => setValue('payment_method_id', DEBIT_CARD_PAYMENT_METHOD_ID)}
               selected={paymentMethodId === DEBIT_CARD_PAYMENT_METHOD_ID}
             >
               Cartão de débito
             </Button>
             <Button
               iconName="Money"
-              onClick={() => setPaymentMethodId(MONEY_PAYMENT_METHOD_ID)}
+              onClick={() => setValue('payment_method_id', MONEY_PAYMENT_METHOD_ID)}
               selected={paymentMethodId === MONEY_PAYMENT_METHOD_ID}
             >
               Dinheiro
             </Button>
           </ButtonsContainer>
+
+          <HelperText>{paymentMethodError?.message}</HelperText>
         </ContentContainer>
       </Section>
 
@@ -171,7 +204,7 @@ const Checkout: React.FC = () => {
 
         <ContentContainer style={{ borderRadius: '6px 44px 6px 44px' }}>
           {coffeesInCart.map((coffee) => (
-            <>
+            <Fragment key={coffee.id}>
               <CoffeeItem>
                 <div style={{ display: 'flex', gap: '1.25rem' }}>
                   <CoffeeImage src={coffee.image} />
@@ -220,7 +253,7 @@ const Checkout: React.FC = () => {
                 <CoffeePrice>R$ {formatNumber.currency(coffee.price)}</CoffeePrice>
               </CoffeeItem>
               <Line />
-            </>
+            </Fragment>
           ))}
 
           <TotalsContainer>
@@ -240,7 +273,9 @@ const Checkout: React.FC = () => {
             </TotalPrice>
           </TotalsContainer>
 
-          <StyledButton type="submit">Confirmar pedido</StyledButton>
+          <StyledButton type="submit" form="orderForm">
+            Confirmar pedido
+          </StyledButton>
         </ContentContainer>
       </Section>
     </Container>

@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 import { Button } from 'components';
 
+interface ContentContainerProps {
+  error?: boolean;
+}
+
 export const Container = styled.div`
   display: flex;
   align-items: flex-start;
@@ -17,13 +21,18 @@ export const Section = styled.section`
   gap: 0.75rem;
 `;
 
-export const ContentContainer = styled.div`
+export const ContentContainer = styled.div<ContentContainerProps>`
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 2.5rem;
   border-radius: 6px;
-  background-color: ${(props) => props.theme.base.card};
+  position: relative;
+
+  ${(props) => ({
+    backgroundColor: props.theme.base.card,
+    ...(props.error && { border: `1px solid ${props.theme.base.error}` })
+  })}
 `;
 
 export const SectionTitle = styled.p`
@@ -60,6 +69,17 @@ export const ButtonsContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
+`;
+
+export const HelperText = styled.p`
+  position: absolute;
+  top: 100%;
+  margin-top: 0.5rem;
+
+  ${(props) => ({
+    ...props.theme.typography.roboto.S,
+    color: props.theme.base.error
+  })}
 `;
 
 export const CoffeeItem = styled.div`
