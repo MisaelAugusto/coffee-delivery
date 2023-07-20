@@ -1,4 +1,5 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
+import { useTheme } from 'styled-components';
 
 import introductionCoffeImage from 'assets/introduction-coffee.png';
 
@@ -15,46 +16,20 @@ import {
 
 import IntroductionItem from './components/IntroductionItem';
 import CoffeeItem from './components/CoffeeItem';
-import { useTheme } from 'styled-components';
-import useCoffees from 'store/coffees';
+import { useCart } from 'hooks';
 
 const Home: React.FC = () => {
   const theme = useTheme();
-  const { coffees: coffeesList } = useCoffees();
 
-  const [coffees, setCoffees] = useState<Coffee[]>([]);
+  const {
+    coffees,
+    handleIncreaseCoffeeQuantity,
+    handleDecreaseCoffeeQuantity,
+    handleAddCoffeeToCart,
+    resetCoffeesQuantities
+  } = useCart();
 
-  const handleIncreaseCoffeeQuantity = useCallback((coffeeId: number) => {
-    setCoffees((previousState) =>
-      previousState.map((coffee) => ({
-        ...coffee,
-        ...(coffee.id === coffeeId && { quantity: coffee.quantity + 1 })
-      }))
-    );
-  }, []);
-
-  const handleDecreaseCoffeeQuantity = useCallback((coffeeId: number) => {
-    setCoffees((previousState) =>
-      previousState.map((coffee) => ({
-        ...coffee,
-        ...(coffee.id === coffeeId && { quantity: coffee.quantity - 1 })
-      }))
-    );
-  }, []);
-
-  const handleAddCoffeeToCart = useCallback((coffeeId: number) => {
-    setCoffees((previousState) =>
-      previousState.map((coffee) => ({
-        ...coffee,
-        ...(coffee.id === coffeeId && {
-          quantity: 0,
-          quantityInCart: coffee.quantity + coffee.quantityInCart
-        })
-      }))
-    );
-  }, []);
-
-  useEffect(() => setCoffees(coffeesList), [coffeesList]);
+  useEffect(() => resetCoffeesQuantities, [resetCoffeesQuantities]);
 
   return (
     <Fragment>

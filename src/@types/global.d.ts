@@ -13,4 +13,6 @@ declare global {
     quantity: number;
     quantityInCart: number;
   }
+
+  type TextFieldOnChangeEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 }

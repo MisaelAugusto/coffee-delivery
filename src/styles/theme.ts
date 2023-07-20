@@ -33,7 +33,8 @@ const theme = {
     button: '#e6e5e5',
     input: '#ededed',
     card: '#f3f2f2',
-    background: '#fafafa'
+    background: '#fafafa',
+    error: '#ff5050'
   },
   typography: {
     baloo2: {

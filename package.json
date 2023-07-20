@@ -23,13 +23,16 @@
     "coverage": "jest --collectCoverage"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.1.1",
     "@phosphor-icons/react": "^2.0.10",
     "identity-obj-proxy": "^3.0.0",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.1",
     "react-router-dom": "^6.13.0",
-    "styled-components": "^5.3.11"
+    "styled-components": "^5.3.11",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
