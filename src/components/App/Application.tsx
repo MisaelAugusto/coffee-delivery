@@ -8,12 +8,14 @@ import logoImage from 'assets/logo.svg';
 import { Header, HeaderContent, Place, Cart } from './styles';
 
 const Application: React.FC<PropsWithChildren> = ({ children }) => {
-  const { coffees } = useCart();
+  const { coffees, address } = useCart();
 
   const coffeesInCart = useMemo(
     () => coffees.filter((coffee) => coffee.quantityInCart > 0).length,
     [coffees]
   );
+
+  const hasAddress = useMemo(() => address.payment_method_id > 0, [address]);
 
   return (
     <Fragment>
@@ -28,7 +30,7 @@ const Application: React.FC<PropsWithChildren> = ({ children }) => {
             <p>Campina Grande, PB</p>
           </Place>
 
-          <Cart to="/checkout" content="1">
+          <Cart to={hasAddress ? '#' : '/checkout'} content="1">
             <Icon name="ShoppingCart" size={28} weight="fill" />
           </Cart>
         </HeaderContent>

@@ -18,6 +18,7 @@ interface CartContextType {
   handleRemoveCoffeeFromCart: (coffeeId: number) => void;
   resetCoffeesQuantities: () => void;
   updateAddress: (newAddress: Address) => void;
+  resetAddress: () => void;
 }
 
 const CartContext = createContext<CartContextType>({} as CartContextType);
@@ -99,6 +100,10 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setAddress(newAddress);
   }, []);
 
+  const resetAddress = useCallback(() => {
+    setAddress(EMPTY_ADDRESS);
+  }, []);
+
   const value = useMemo(
     () => ({
       coffees,
@@ -108,7 +113,8 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
       handleAddCoffeeToCart,
       handleRemoveCoffeeFromCart,
       resetCoffeesQuantities,
-      updateAddress
+      updateAddress,
+      resetAddress
     }),
     [
       coffees,
@@ -118,7 +124,8 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
       handleIncreaseCoffeeQuantity,
       handleRemoveCoffeeFromCart,
       resetCoffeesQuantities,
-      updateAddress
+      updateAddress,
+      resetAddress
     ]
   );
 

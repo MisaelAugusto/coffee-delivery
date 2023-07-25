@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import * as zod from 'zod';
@@ -80,6 +80,8 @@ const Checkout: React.FC = () => {
     updateAddress
   } = useCart();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const methods = useForm<FormValues>({
     defaultValues: {
       ...defaultValues,
@@ -115,13 +117,23 @@ const Checkout: React.FC = () => {
     [coffeesInCart]
   );
 
+  const mockedAPICall = useCallback(() => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+
+      navigate('/order');
+    }, 2000);
+  }, [navigate]);
+
   const submit = useCallback(
     (data: FormValues) => {
       updateAddress(data);
 
-      navigate('/order');
+      mockedAPICall();
     },
-    [navigate, updateAddress]
+    [mockedAPICall, updateAddress]
   );
 
   useEffect(() => {
@@ -296,7 +308,12 @@ const Checkout: React.FC = () => {
             </TotalPrice>
           </TotalsContainer>
 
-          <SubmitButton type="submit" form="orderForm" disabled={numberOfCoffeesInCart === 0}>
+          <SubmitButton
+            type="submit"
+            form="orderForm"
+            loading={isLoading}
+            disabled={numberOfCoffeesInCart === 0}
+          >
             Confirmar pedido
           </SubmitButton>
         </ContentContainer>

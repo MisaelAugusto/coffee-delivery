@@ -26,10 +26,14 @@ const Home: React.FC = () => {
     handleIncreaseCoffeeQuantity,
     handleDecreaseCoffeeQuantity,
     handleAddCoffeeToCart,
-    resetCoffeesQuantities
+    resetCoffeesQuantities,
+    resetAddress
   } = useCart();
 
-  useEffect(() => resetCoffeesQuantities, [resetCoffeesQuantities]);
+  useEffect(() => {
+    resetAddress();
+    resetCoffeesQuantities();
+  }, [resetAddress, resetCoffeesQuantities]);
 
   return (
     <Fragment>
