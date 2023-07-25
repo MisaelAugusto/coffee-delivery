@@ -11,18 +11,32 @@ import useCoffees from 'store/coffees';
 
 interface CartContextType {
   coffees: Coffee[];
+  address: Address;
   handleIncreaseCoffeeQuantity: (coffeeId: number, inCart?: boolean) => void;
   handleDecreaseCoffeeQuantity: (coffeeId: number, inCart?: boolean) => void;
   handleAddCoffeeToCart: (coffeeId: number) => void;
   handleRemoveCoffeeFromCart: (coffeeId: number) => void;
   resetCoffeesQuantities: () => void;
+  updateAddress: (newAddress: Address) => void;
 }
 
 const CartContext = createContext<CartContextType>({} as CartContextType);
 
+const EMPTY_ADDRESS = {
+  cep: '',
+  rua: '',
+  numero: '',
+  complemento: '',
+  bairro: '',
+  cidade: '',
+  uf: '',
+  payment_method_id: -1
+};
+
 export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { coffees: coffeesList } = useCoffees();
 
+  const [address, setAddress] = useState<Address>(EMPTY_ADDRESS);
   const [coffees, setCoffees] = useState<Coffee[]>(coffeesList);
 
   const handleIncreaseCoffeeQuantity = useCallback((coffeeId: number, inCart = false) => {
@@ -81,22 +95,30 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     );
   }, []);
 
+  const updateAddress = useCallback((newAddress: Address) => {
+    setAddress(newAddress);
+  }, []);
+
   const value = useMemo(
     () => ({
       coffees,
+      address,
       handleIncreaseCoffeeQuantity,
       handleDecreaseCoffeeQuantity,
       handleAddCoffeeToCart,
       handleRemoveCoffeeFromCart,
-      resetCoffeesQuantities
+      resetCoffeesQuantities,
+      updateAddress
     }),
     [
       coffees,
+      address,
       handleAddCoffeeToCart,
       handleDecreaseCoffeeQuantity,
       handleIncreaseCoffeeQuantity,
       handleRemoveCoffeeFromCart,
-      resetCoffeesQuantities
+      resetCoffeesQuantities,
+      updateAddress
     ]
   );
 

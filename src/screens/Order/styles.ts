@@ -5,8 +5,8 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 2.5rem;
   padding: 0 8rem;
-  width: max-content;
-  margin-top: 5rem;
+  margin: 5rem auto 0;
+  width: 80%;
 `;
 
 export const Header = styled.div`
@@ -28,7 +28,7 @@ export const Header = styled.div`
 export const Section = styled.section`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 6.375rem;
 `;
 

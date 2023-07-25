@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -33,6 +33,11 @@ import {
   SubmitButton
 } from './styles';
 import formatNumber from 'utils/formatNumber';
+import {
+  CREDIT_CARD_PAYMENT_METHOD_ID,
+  DEBIT_CARD_PAYMENT_METHOD_ID,
+  MONEY_PAYMENT_METHOD_ID
+} from 'utils/helpers/global';
 
 const schema = zod.object({
   cep: zod.string().nonempty('CEP é obrigatório'),
@@ -60,10 +65,6 @@ const defaultValues: FormValues = {
 
 const DELIVERY_TAX = 0.25;
 
-const CREDIT_CARD_PAYMENT_METHOD_ID = 1;
-const DEBIT_CARD_PAYMENT_METHOD_ID = 2;
-const MONEY_PAYMENT_METHOD_ID = 3;
-
 const MIN_COFFEE_QUANTITY_IN_CART = 1;
 const MAX_COFFEE_QUANTITY_IN_CART = 10;
 
@@ -72,13 +73,18 @@ const Checkout: React.FC = () => {
 
   const {
     coffees,
+    address,
     handleIncreaseCoffeeQuantity,
     handleDecreaseCoffeeQuantity,
-    handleRemoveCoffeeFromCart
+    handleRemoveCoffeeFromCart,
+    updateAddress
   } = useCart();
 
   const methods = useForm<FormValues>({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      ...address
+    },
     resolver: zodResolver(schema)
   });
   const {
@@ -111,11 +117,11 @@ const Checkout: React.FC = () => {
 
   const submit = useCallback(
     (data: FormValues) => {
-      console.log(data);
+      updateAddress(data);
 
       navigate('/order');
     },
-    [navigate]
+    [navigate, updateAddress]
   );
 
   useEffect(() => {

@@ -15,4 +15,17 @@ declare global {
   }
 
   type TextFieldOnChangeEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+
+  type PaymentMethodId = 1 | 2 | 3;
+
+  interface Address {
+    cep: string;
+    rua: string;
+    numero: string;
+    complemento: string;
+    bairro: string;
+    cidade: string;
+    uf: string;
+    payment_method_id: number;
+  }
 }
