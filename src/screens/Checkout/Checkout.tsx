@@ -1,6 +1,6 @@
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -33,6 +33,11 @@ import {
   SubmitButton
 } from './styles';
 import formatNumber from 'utils/formatNumber';
+import {
+  CREDIT_CARD_PAYMENT_METHOD_ID,
+  DEBIT_CARD_PAYMENT_METHOD_ID,
+  MONEY_PAYMENT_METHOD_ID
+} from 'utils/helpers/global';
 
 const schema = zod.object({
   cep: zod.string().nonempty('CEP é obrigatório'),
@@ -60,23 +65,28 @@ const defaultValues: FormValues = {
 
 const DELIVERY_TAX = 0.25;
 
-const CREDIT_CARD_PAYMENT_METHOD_ID = 1;
-const DEBIT_CARD_PAYMENT_METHOD_ID = 2;
-const MONEY_PAYMENT_METHOD_ID = 3;
-
 const MIN_COFFEE_QUANTITY_IN_CART = 1;
 const MAX_COFFEE_QUANTITY_IN_CART = 10;
 
 const Checkout: React.FC = () => {
+  const navigate = useNavigate();
+
   const {
     coffees,
+    address,
     handleIncreaseCoffeeQuantity,
     handleDecreaseCoffeeQuantity,
-    handleRemoveCoffeeFromCart
+    handleRemoveCoffeeFromCart,
+    updateAddress
   } = useCart();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const methods = useForm<FormValues>({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      ...address
+    },
     resolver: zodResolver(schema)
   });
   const {
@@ -107,9 +117,24 @@ const Checkout: React.FC = () => {
     [coffeesInCart]
   );
 
-  const submit = useCallback((data: FormValues) => {
-    console.log(data);
-  }, []);
+  const mockedAPICall = useCallback(() => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+
+      navigate('/order');
+    }, 2000);
+  }, [navigate]);
+
+  const submit = useCallback(
+    (data: FormValues) => {
+      updateAddress(data);
+
+      mockedAPICall();
+    },
+    [mockedAPICall, updateAddress]
+  );
 
   useEffect(() => {
     if (paymentMethodId > 0) clearErrors('payment_method_id');
@@ -283,7 +308,12 @@ const Checkout: React.FC = () => {
             </TotalPrice>
           </TotalsContainer>
 
-          <SubmitButton type="submit" form="orderForm" disabled={numberOfCoffeesInCart === 0}>
+          <SubmitButton
+            type="submit"
+            form="orderForm"
+            loading={isLoading}
+            disabled={numberOfCoffeesInCart === 0}
+          >
             Confirmar pedido
           </SubmitButton>
         </ContentContainer>

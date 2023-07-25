@@ -10,6 +10,7 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   iconName?: keyof typeof PhosphorIcons;
   type?: 'button' | 'submit';
   form?: string;
+  loading?: boolean;
   disabled?: boolean;
 }
 
@@ -19,12 +20,14 @@ const Button: React.FC<ButtonProps> = ({
   selected = false,
   size = 'normal',
   type = 'button',
+  loading = false,
+  disabled = false,
   ...props
 }) => {
   return (
-    <StyledButton selected={selected} size={size} {...props}>
+    <StyledButton selected={selected} size={size} disabled={disabled || loading} {...props}>
       {iconName && <Icon name={iconName} size={16} />}
-      {children}
+      {loading ? <p>Carregando...</p> : children}
     </StyledButton>
   );
 };
