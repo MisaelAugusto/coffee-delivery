@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import DeliveryManImage from 'assets/delivery-man.png';
 
-import { Icon } from 'components';
+import { Button, Icon } from 'components';
 import { useCart } from 'hooks';
 
 import {
@@ -22,7 +23,8 @@ const TIME_TO_PRODUCE_ONE_COFFEE_IN_MINUTES = 2;
 const EXTRA_TIME_IN_MINUTES = 20;
 
 const Order: React.FC = () => {
-  const { coffees, address } = useCart();
+  const navigate = useNavigate();
+  const { coffees, address, resetCoffeesInCart } = useCart();
 
   const {
     rua: addressLine1,
@@ -45,6 +47,12 @@ const Order: React.FC = () => {
     () => PAYMENT_METHODS[paymentMethodId as PaymentMethodId],
     [paymentMethodId]
   );
+
+  const handleBackToHome = useCallback(() => {
+    navigate('/');
+
+    resetCoffeesInCart();
+  }, [navigate, resetCoffeesInCart]);
 
   return (
     <Container>
@@ -100,6 +108,10 @@ const Order: React.FC = () => {
 
         <img src={DeliveryManImage} alt="Ilustração de entregador" />
       </Section>
+
+      <Button style={{ alignSelf: 'flex-end' }} onClick={handleBackToHome}>
+        Voltar
+      </Button>
     </Container>
   );
 };
