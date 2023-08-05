@@ -11,5 +11,6 @@ export default {
   coveragePathIgnorePatterns: ['src/main.tsx'],
   collectCoverageFrom: ['src/**/*.[jt]s?(x)', '!src/**/__tests__/*'],
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura'],
-  moduleDirectories: ['src', 'node_modules']
+  moduleDirectories: ['src', 'node_modules'],
+  testMatch: ['**/__tests__/**/*.test.tsx']
 };
