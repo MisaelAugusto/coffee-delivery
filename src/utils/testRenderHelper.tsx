@@ -3,15 +3,17 @@ import { render } from '@testing-library/react';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import { CartProvider } from 'hooks/useCart/useCart';
+import useCart, { CartProvider } from 'hooks/useCart/useCart';
 import Application from 'components/App/Application';
 import { GlobalStyles, theme } from 'styles';
 import RouteProvider from 'components/RouteProvider';
 
 interface Options {
-  component?: React.FC;
+  component?: React.ReactElement;
   route?: string;
   state?: Record<string, unknown> | null;
+  coffees?: Coffee[];
+  address?: Address;
 }
 
 const ContextHelper: React.FC<PropsWithChildren> = ({ children }) => {
@@ -28,19 +30,34 @@ const ContextHelper: React.FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const testRenderHelper = ({ component: Component, route, state = null }: Options) => {
+const testRenderHelper = ({
+  component: Component,
+  coffees = [],
+  address,
+  route,
+  state = null
+}: Options) => {
   const RouteProviderComponent = () => {
     const navigate = useNavigate();
+    const { updateCoffees, updateAddress } = useCart();
 
     useEffect(() => {
       if (route && route !== '/') navigate(route, { state });
+
+      if (coffees.length > 0) updateCoffees(coffees);
+
+      if (address) updateAddress(address);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <RouteProvider />;
   };
 
-  return render(Component ? <Component /> : <RouteProviderComponent />, { wrapper: ContextHelper });
+  const RenderComponent = Component ? () => Component : null;
+
+  return render(RenderComponent ? <RenderComponent /> : <RouteProviderComponent />, {
+    wrapper: ContextHelper
+  });
 };
 
 export { testRenderHelper as default };

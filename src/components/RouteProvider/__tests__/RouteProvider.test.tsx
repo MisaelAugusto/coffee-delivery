@@ -4,7 +4,7 @@ import RouteProvider from '../RouteProvider';
 
 describe('Component RouteProvider', () => {
   it('should render component', async () => {
-    const { findByText } = testRenderHelper({ component: () => <RouteProvider /> });
+    const { findByText } = testRenderHelper({ component: <RouteProvider /> });
 
     await findByText('Campina Grande, PB');
 

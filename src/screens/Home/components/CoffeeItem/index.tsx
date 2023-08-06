@@ -84,7 +84,11 @@ const CoffeeItem: React.FC<CoffeeItemProps> = ({
             </QuantityButton>
           </QuantityContainer>
 
-          <ShopButton onClick={() => handleAddCoffeeToCart(id)} disabled={quantity === 0}>
+          <ShopButton
+            title="Adicionar ao carrinho"
+            onClick={() => handleAddCoffeeToCart(id)}
+            disabled={quantity === 0}
+          >
             <Icon name="ShoppingCart" size={22} weight="fill" color="white" />
 
             <ShopButtonTooltip>

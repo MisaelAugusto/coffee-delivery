@@ -63,7 +63,7 @@ const defaultValues: FormValues = {
   payment_method_id: -1
 };
 
-const DELIVERY_TAX = 0.25;
+const DELIVERY_TAX = 0.5;
 
 const MIN_COFFEE_QUANTITY_IN_CART = 1;
 const MAX_COFFEE_QUANTITY_IN_CART = 10;

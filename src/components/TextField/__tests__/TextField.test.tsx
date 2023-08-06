@@ -21,7 +21,7 @@ describe('Component TextField', () => {
 
     expect(getByPlaceholderText('Teste')).toBeInTheDocument();
 
-    expect(getByText('opcional')).toBeInTheDocument();
+    expect(getByText('Opcional')).toBeInTheDocument();
   });
 
   it('should render component with error', async () => {

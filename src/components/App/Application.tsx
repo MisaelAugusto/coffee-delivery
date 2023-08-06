@@ -30,7 +30,7 @@ const Application: React.FC<PropsWithChildren> = ({ children }) => {
             <p>Campina Grande, PB</p>
           </Place>
 
-          <Cart to={hasAddress ? '#' : '/checkout'} content="1">
+          <Cart title="Carrinho" to={hasAddress ? '#' : '/checkout'}>
             <Icon name="ShoppingCart" size={28} weight="fill" />
           </Cart>
         </HeaderContent>
