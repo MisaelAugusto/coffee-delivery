@@ -36,6 +36,8 @@
   </a>.
 </p>
 
+https://github.com/MisaelAugusto/coffee-delivery/assets/30798460/6c7831fc-a899-4266-8c54-71c30efb0b96
+
 <h2 id="technologies">💻️ Technologies</h2>
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
