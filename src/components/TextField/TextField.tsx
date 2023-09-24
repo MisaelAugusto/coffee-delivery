@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { mask as maskUtil } from 'utils';
 
-interface TextFieldProps extends HTMLAttributes<HTMLInputElement> {
+export interface TextFieldProps extends HTMLAttributes<HTMLInputElement> {
   name: string;
   optional?: boolean;
   mask?: 'cep' | 'number' | 'uf';

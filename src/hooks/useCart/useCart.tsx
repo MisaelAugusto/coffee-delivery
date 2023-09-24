@@ -18,6 +18,7 @@ interface CartContextType {
   handleRemoveCoffeeFromCart: (coffeeId: number) => void;
   resetCoffeesQuantities: () => void;
   resetCoffeesInCart: () => void;
+  updateCoffees: (newCoffees: Coffee[]) => void;
   updateAddress: (newAddress: Address) => void;
   resetAddress: () => void;
 }
@@ -106,6 +107,10 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     );
   }, []);
 
+  const updateCoffees = useCallback((newCoffees: Coffee[]) => {
+    setCoffees(newCoffees);
+  }, []);
+
   const updateAddress = useCallback((newAddress: Address) => {
     setAddress(newAddress);
   }, []);
@@ -124,6 +129,7 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
       handleRemoveCoffeeFromCart,
       resetCoffeesQuantities,
       resetCoffeesInCart,
+      updateCoffees,
       updateAddress,
       resetAddress
     }),
@@ -136,6 +142,7 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
       handleRemoveCoffeeFromCart,
       resetCoffeesQuantities,
       resetCoffeesInCart,
+      updateCoffees,
       updateAddress,
       resetAddress
     ]
